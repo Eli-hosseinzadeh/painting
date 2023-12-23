@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Painting</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="paintCanvas" width="800" height="600"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#paintCanvas {
+    border: 2px solid #333;
+}
+const canvas = document.getElementById('paintCanvas');
+const context = canvas.getContext('2d');
+let painting = false;
+
+function startPosition(e) {
+    painting = true;
+    draw(e);
+}
+
+function endPosition() {
+    painting = false;
+    context.beginPath();
+}
+
+function draw(e) {
+    if (!painting) return;
+
+    context.lineWidth = 5;
+    context.lineCap = 'round';
+    context.strokeStyle = 'black';
+
+    context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+}
+
+canvas.addEventListener('mousedown', startPosition);
+canvas.addEventListener('mouseup', endPosition);
+canvas.addEventListener('mousemove', draw);
